@@ -2,9 +2,17 @@ require('dotenv').config()
 const express = require ('express');
 const bodyParser = require ("body-parser")
 const app = express();
+const candidatesRoute = require('./routes/candidatesRoutes.js')
+// const adminRoute = require('./routes/adminRoutes.js')
 
+app.use(express.json())
  app.use (bodyParser.urlencoded({extended:true}))
  app.use(express.static('public')) 
+
+
+ app.use('/', candidatesRoute);
+//  app.use('/', adminRoute);
+
 app.get('/', (req, res)=>{
     res.sendFile(__dirname + "./index.html")
 })
@@ -17,6 +25,7 @@ let fnumber = req.body.fnumber
 console.log(uname, ognum, fnumber)
 res.sendFile(__dirname + "/public/tescomcbtor.html")
 })
+
 
 
 
