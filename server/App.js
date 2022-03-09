@@ -4,7 +4,7 @@ const bodyParser = require ("body-parser")
 const app = express();
 const candidatesRoute = require('./routes/candidatesRoutes.js')
 const auth = require ('./auth/authRoutes')
-// const adminRoute = require('./routes/adminRoutes.js')
+ const adminRoute = require('./routes/adminRoutes.js')
 
 app.use(express.json())
  app.use (bodyParser.urlencoded({extended:true}))
@@ -13,7 +13,7 @@ app.use(express.json())
 
  app.use('/', candidatesRoute);
  app.use('/', auth)
-//  app.use('/', adminRoute);
+ app.use('/', adminRoute);
 
 app.get('/', (req, res)=>{
     res.sendFile(__dirname + "./index.html")
