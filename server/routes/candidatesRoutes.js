@@ -7,17 +7,18 @@ const pool = require('../db.js')
 Router.post('/candidates', async (req, res) => {
 
     try {
-
+       
         const { full_name, og_number, file_number } = req.body
 
         const og_Number_Exist = await pool.query("SELECT EXISTS (select * from candidates WHERE og_number = $1)", [og_number]); 
-        console.log(og_Number_Exist)
+       // console.log(og_Number_Exist)
         if (og_Number_Exist.rows[0].exists) throw new Error ("candidate already exist") 
 
 
         const candidate = await pool.query('INSERT INTO CANDIDATES (full_name, og_number, file_number) VALUES ($1, $2, $3) RETURNING *', [full_name, og_number, file_number])
-         res.status(200).json('candidate successfuly registered')
-
+    //  res.redirect("http://localhost:5000/tescomcbtor.html")
+        res.status(200).json('candidate successfuly registered')
+      
     } catch (error) {
         res.status(500).json(error.message)
     }

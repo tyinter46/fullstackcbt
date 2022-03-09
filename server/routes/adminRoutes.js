@@ -34,17 +34,17 @@ try {
 })
 
 
-Router.put('/:id', async (req, res)=>{
+Router.put('admin/:id', async (req, res)=>{
 
     const id = request.params.id
-    const {newPassword} = req.body 
+    const {newPassword, og_number} = req.body 
     const hashedPassword = await bcrypt.hash(newPassword, 10)
-    const updateAdminDetails = await pool.query("UPDATE admin SET password = $1 WHERE id= $2 RETURNING *, [hashedPassword, id]")
+    const updateAdminDetails = await pool.query("UPDATE admin SET password = $1, og_number = $2 WHERE id= $3 RETURNING *, [hashedPassword, og_number, id]")
     res.status(200).json(updateAdminDetails.rows[0].og_number);
 }) 
 
 
-Router.delete('/:id', async (req, res)=>{
+Router.delete('admin/:id', async (req, res)=>{
 
     const id = req.params.id
     const idExist = await pool.query("SELECT EXISTS (select * from candidates WHERE id = $1)", [id]); 
