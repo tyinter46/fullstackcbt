@@ -1,19 +1,29 @@
 const express = require('express')
 const Router = express.Router()
 const pool = require('../db.js')
+const score = require('../public/script').default
+
+console.log(score)
 
 
+Router.post('/score', async (req, res) => {
+    
+      try {
 
+                  
+      } catch (error) {
+          
+      }
+
+})
 Router.post('/candidates', async (req, res) => {
 
     try {
        
         const { full_name, og_number, file_number } = req.body
-
         const og_Number_Exist = await pool.query("SELECT EXISTS (select * from candidates WHERE og_number = $1)", [og_number]); 
        // console.log(og_Number_Exist)
         if (og_Number_Exist.rows[0].exists) throw new Error ("candidate already exist") 
-
 
         const candidate = await pool.query('INSERT INTO CANDIDATES (full_name, og_number, file_number) VALUES ($1, $2, $3) RETURNING *', [full_name, og_number, file_number])
     //  res.redirect("http://localhost:5000/tescomcbtor.html")
