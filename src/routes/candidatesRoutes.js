@@ -1,21 +1,23 @@
 const express = require('express')
 const Router = express.Router()
 const pool = require('../db.js')
-const score = require('../public/script').default
 
-console.log(score)
-
-
+// const {score } = require('./score')
+// lib = require('../public/script')
+//  console.log(score)
 Router.post('/score', async (req, res) => {
     
       try {
+            const {id, score} = req.body
 
+            const sendScore = await pool.query('UPDATE candidates SET score = $1  WHERE id = $2 RETURNING *', [score, id])
                   
-      } catch (error) {
-          
+        } catch (error) {
+        res.status(500).json(error.message)
       }
 
 })
+
 Router.post('/candidates', async (req, res) => {
 
     try {
@@ -34,6 +36,17 @@ Router.post('/candidates', async (req, res) => {
     }
 })
 
+Router.get('/candidate/:id', async (req, res) =>{
+
+    try {
+        const id = req.params.id 
+        const oneCandidate = await pool.query("SELECT * FROM candidates WHERE file_number = $1", [id])
+        res.status(200).json(oneCandidate.rows)
+        
+    } catch (error) {
+        res.json(error.message)
+    }
+})
 
 Router.get('/candidates', async (req, res) => {
     try {
@@ -49,6 +62,22 @@ Router.get('/candidates', async (req, res) => {
 })
 
 
+Router.put('/candidate_score/:id', async (req, res) => {
+
+    try {
+        const  id = req.params.id
+
+       const { score } = req.body
+
+        const updateCandidateDetails = await pool.query("UPDATE candidates SET score = $1  WHERE file_number = $2 RETURNING *", [score, id])
+
+        res.status(200).json("candidate's score updated successfuly")
+
+    } catch (error) {
+        res.status(500).json(error.message)
+    }
+
+})
 Router.put('/candidate/:id', async (req, res) => {
 
     try {
