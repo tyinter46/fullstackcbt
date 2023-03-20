@@ -8,7 +8,8 @@ const auth = require ('./auth/authRoutes')
 
 app.use(express.json())
  app.use (bodyParser.urlencoded({extended:true}))
- app.use(express.static('public')) 
+//  app.use(express.static("public")) 
+ app.use(express.static(__dirname + "/public"));
 
 
  app.use('/', candidatesRoute);
@@ -16,18 +17,21 @@ app.use(express.json())
  app.use('/', adminRoute);
 
 app.get('/', (req, res)=>{
-    res.sendFile(__dirname + "./index.html")
+  
+
+     res.sendFile(__dirname + "/public/index.html")
 })
 
 
 
-app.post('/tescomcbtor.html', (req, res)=>{
+app.post('/public/tescomcbtor.html', (req, res)=>{
     // res.send(`<input type = "text" name = "name"></input> <input type = "submit" value = '${sendName()}'; onclick = send()></input>`)
 let uname = req.body.uname;
 let ognum = req.body.ognum;
 let fnumber = req.body.fnumber  
 console.log(uname, ognum, fnumber)
 res.sendFile(__dirname + "/public/tescomcbtor.html")
+
 })
 
 const PORT = process.env.PORT || 5000

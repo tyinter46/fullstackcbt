@@ -1,3 +1,5 @@
+CREATE DATABASE fulstackcbt
+
 CREATE TABLE IF NOT EXISTS public.admin
 (
     id bigint NOT NULL DEFAULT nextval('admin_id_seq'::regclass),

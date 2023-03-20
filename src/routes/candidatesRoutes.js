@@ -24,7 +24,7 @@ Router.post('/candidates', async (req, res) => {
        
         const { full_name, og_number, file_number } = req.body
         const og_Number_Exist = await pool.query("SELECT EXISTS (select * from candidates WHERE og_number = $1)", [og_number]); 
-       // console.log(og_Number_Exist)
+       console.log(og_Number_Exist)
         if (og_Number_Exist.rows[0].exists) throw new Error ("candidate already exist") 
 
         const candidate = await pool.query('INSERT INTO CANDIDATES (full_name, og_number, file_number) VALUES ($1, $2, $3) RETURNING *', [full_name, og_number, file_number])
@@ -50,13 +50,24 @@ Router.get('/candidate/:id', async (req, res) =>{
 
 Router.get('/candidates', async (req, res) => {
     try {
+const {page, size} = req.query
 
+if (page!= 'undefined' && size != 'undefined'){
+const allCandidates = await pool.query("SELECT * FROM candidates ORDER BY candidates.id LIMIT $2 OFFSET (($1 - 1) * $2)", [page, size])
+console.log(allCandidates.rows)
+res.status(200).json(allCandidates.rows)
+
+} else {
 
         const allCandidates = await pool.query("SELECT * from candidates")
+        console.log(allCandidates.rows)
         res.status(200).json(allCandidates.rows)
 
+}
+      
     } catch (error) {
-        res.send(error.message)
+        console.log
+        res.status(500).json(error.message)
     }
 
 })
